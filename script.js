@@ -135,6 +135,9 @@ function gerarAlertaFinanceiro(entradas, saidas, cartao, saldo, limiteDisponivel
 function renderizarTransacoes() {
   listaTransacoesEl.innerHTML = '';
 
+  // Pega apenas as primeiras 14 transações da lista
+  const transacoesExibidas = transacoes.slice(0, 14);
+
   transacoes.forEach((transacao, index) => {
     const li = document.createElement('li');
     li.classList.add(transacao.tipo);

@@ -244,3 +244,9 @@ li.cartao { border-left-color: #8e44ad; }
   color: #7f8c8d;
   font-size: 13px;
 }
+/* Área de histórico rolável (limitada a 14 linhas / altura fixa) */
+#lista-transacoes {
+  max-height: 420px; /* Altura aproximada para caber 14 itens confortavelmente */
+  overflow-y: auto;  /* Ativa a barra de rolagem vertical apenas aqui */
+  padding-right: 5px; /* Espaço para a barra de rolagem não colar no texto */
+}
