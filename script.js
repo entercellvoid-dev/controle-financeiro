@@ -16,7 +16,7 @@ const limiteDisponivelEl = document.getElementById('limite-disponivel');
 const listaTransacoesEl = document.getElementById('lista-transacoes');
 const alertaStatusEl = document.getElementById('alerta-status');
 
-// Botões de Backup
+// Botões de Backup e Reset
 const btnExportar = document.getElementById('btn-exportar');
 const btnImportar = document.getElementById('btn-importar');
 const inputImportar = document.getElementById('input-importar');
@@ -170,7 +170,7 @@ function renderizarTransacoes() {
   atualizarTotais();
 }
 
-// Adicionar Transação
+// Adicionar Transação (agora usando unshift para colocar a mais nova no topo)
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -190,7 +190,7 @@ form.addEventListener('submit', (e) => {
     dataHora: obterDataHoraFormatada()
   };
 
-  transacoes.push(novaTransacao);
+  transacoes.unshift(novaTransacao);
   renderizarTransacoes();
 
   descricaoInput.value = '';
