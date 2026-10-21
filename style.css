@@ -235,3 +235,12 @@ li.cartao { border-left-color: #8e44ad; }
   font-size: 12px;
   width: auto;
 }
+/* Rodapé de Direitos Autorais */
+.rodape-autorais {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid #eaeaea;
+  color: #7f8c8d;
+  font-size: 13px;
+}
