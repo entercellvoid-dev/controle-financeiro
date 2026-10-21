@@ -1,0 +1,237 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f4f7f6;
+  color: #333;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+/* Relógio */
+.painel-relogio {
+  text-align: center;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+/* Painel de Backup */
+.painel-backup {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-backup {
+  width: auto;
+  padding: 8px 14px;
+  font-size: 13px;
+  background-color: #34495e;
+}
+
+.btn-backup:hover {
+  background-color: #2c3e50;
+}
+
+.btn-verde {
+  background-color: #27ae60;
+}
+
+.btn-verde:hover {
+  background-color: #219653;
+}
+
+/* Configuração do Limite */
+.card-config {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #eef2f7;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.card-config input {
+  width: 130px;
+  padding: 6px;
+}
+
+.card-config button {
+  width: auto;
+  padding: 6px 15px;
+  font-size: 14px;
+}
+
+/* Container dos Cards */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.card {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #e9ecef;
+}
+
+.card h3 {
+  font-size: 13px;
+  color: #6c757d;
+  margin-bottom: 8px;
+}
+
+.valor {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.valor.entrada { color: #27ae60; }
+.valor.saida { color: #e74c3c; }
+.valor.cartao { color: #8e44ad; }
+
+/* Status do Cartão */
+.card-limite-status {
+  text-align: center;
+  background: #f3e5f5;
+  color: #4a148c;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+/* Alertas */
+.alerta {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.alerta.alerta-perigo {
+  background-color: #fde8e8;
+  color: #c0392b;
+  border: 1px solid #f5c6cb;
+}
+
+.alerta.alerta-sucesso {
+  background-color: #e8f8f5;
+  color: #27ae60;
+  border: 1px solid #c3e6cb;
+}
+
+.oculto { display: none; }
+
+/* Formulário */
+form {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+/* Lista de Histórico */
+ul { list-style-type: none; }
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border-left: 5px solid #ccc;
+}
+
+li.entrada { border-left-color: #27ae60; }
+li.saida { border-left-color: #e74c3c; }
+li.cartao { border-left-color: #8e44ad; }
+
+.info-transacao {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.data-transacao {
+  font-size: 11px;
+  color: #7f8c8d;
+}
+
+.btn-deletar {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  width: auto;
+}

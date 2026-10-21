@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle Financeiro Completo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>💰 Controle Financeiro</h1>
+
+    <!-- Painel de Data e Hora Atual -->
+    <div class="painel-relogio">
+      <span id="data-hora-atual">Carregando data e hora...</span>
+    </div>
+
+    <!-- Painel de Backup dos Dados -->
+    <div class="painel-backup">
+      <button id="btn-exportar" type="button" class="btn-backup">💾 Baixar Backup</button>
+      <input type="file" id="input-importar" accept=".json" style="display: none;">
+      <button id="btn-importar" type="button" class="btn-backup btn-verde">📂 Restaurar Backup</button>
+    </div>
+
+    <!-- Configuração do Limite do Cartão -->
+    <div class="card-config">
+      <label for="limite-cartao-input"><strong>Limite do Cartão:</strong> R$ </label>
+      <input type="number" id="limite-cartao-input" placeholder="Ex: 3000" step="0.01">
+      <button id="btn-salvar-limite">Definir Limite</button>
+    </div>
+
+    <!-- Cartões de Resumo -->
+    <div class="cards-container">
+      <div class="card">
+        <h3>Entradas (Salário)</h3>
+        <p id="total-entradas" class="valor entrada">R$ 0,00</p>
+      </div>
+      <div class="card">
+        <h3>Gastos à Vista</h3>
+        <p id="total-saidas" class="valor saida">R$ 0,00</p>
+      </div>
+      <div class="card">
+        <h3>Fatura do Cartão</h3>
+        <p id="total-cartao" class="valor cartao">R$ 0,00</p>
+      </div>
+      <div class="card">
+        <h3>Saldo Dinheiro Vivo</h3>
+        <p id="saldo-total" class="valor">R$ 0,00</p>
+      </div>
+    </div>
+
+    <!-- Status do Limite do Cartão -->
+    <div class="card-limite-status">
+      <span><strong>Limite Disponível no Cartão:</strong> <span id="limite-disponivel">R$ 0,00</span></span>
+    </div>
+
+    <!-- Alerta Financeiro -->
+    <div id="alerta-status" class="alerta oculto"></div>
+
+    <!-- Formulário de Transação -->
+    <form id="form-transacao">
+      <h2>Nova Transação</h2>
+      
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <input type="text" id="descricao" placeholder="Ex: Salário, Mercado, Lanche" required>
+      </div>
+
+      <div class="form-group">
+        <label for="valor">Valor (R$)</label>
+        <input type="number" step="0.01" id="valor" placeholder="Ex: 150.00" required>
+      </div>
+
+      <div class="form-group">
+        <label for="tipo">Tipo de Operação</label>
+        <select id="tipo" required>
+          <option value="entrada">Entrada (Salário / Ganho)</option>
+          <option value="saida">Gasto em Dinheiro / Pix / Débito</option>
+          <option value="cartao">Compra no Cartão de Crédito</option>
+        </select>
+      </div>
+
+      <button type="submit">Adicionar Transação</button>
+    </form>
+
+    <!-- Lista do Histórico -->
+    <h2>Histórico de Movimentações</h2>
+    <ul id="lista-transacoes"></ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
