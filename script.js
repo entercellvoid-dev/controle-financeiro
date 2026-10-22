@@ -117,7 +117,7 @@ function gerarAlertaFinanceiro(entradas, saidas, cartao, saldo, limiteDisponivel
   }
 
   if (cartao > saldo) {
-    mensagens.push(`⚠️ <strong>Risco de Endividamento:</strong> A sua fatura acumulada do cartão (<strong>${formatarMoeda(cartao)}</strong>) é maior do que o seu saldo em dinheiro vivo atual (<strong>${formatarMoeda(saldo)}</strong>).`);
+    mensagens.push(`⚠️ <strong>Risco de Endividamento:</strong> A sua fatura acumulada do cartão (<strong>${formatarMoeda(cartao)}</strong>) é maior do que o seu saldo atual (<strong>${formatarMoeda(saldo)}</strong>).`);
   } else if (saldo < 0) {
     mensagens.push(`🚨 <strong>Atenção:</strong> Seu saldo em conta está negativo em <strong>${formatarMoeda(Math.abs(saldo))}</strong>.`);
   }
