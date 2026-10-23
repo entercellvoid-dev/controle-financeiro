@@ -358,5 +358,29 @@ if (btnReset) {
   });
 }
 
+// --- MODO ESCURO / CLARO ---
+const btnTema = document.getElementById('btn-tema');
+
+// Verifica se o usuário já tinha salvo a preferência de tema anteriormente
+const temaSalvo = localStorage.getItem('tema_preferido');
+if (temaSalvo === 'escuro') {
+  document.body.classList.add('dark-mode');
+  if (btnTema) btnTema.textContent = '☀️';
+}
+
+if (btnTema) {
+  btnTema.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    
+    const estaEscuro = document.body.classList.contains('dark-mode');
+    
+    // Troca o ícone do botão (Lua para sol, Sol para lua)
+    btnTema.textContent = estaEscuro ? '☀️' : '🌙';
+    
+    // Salva a preferência no LocalStorage
+    localStorage.setItem('tema_preferido', estaEscuro ? 'escuro' : 'claro');
+  });
+}
+
 // Inicialização
 renderizarTransacoes();

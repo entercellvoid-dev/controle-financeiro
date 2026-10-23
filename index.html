@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Controle Financeiro Pessoal</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <div class="container">
     <!-- Cabeçalho com Relógio e Status -->
     <header>
       <h1>Controle Financeiro</h1>
+      <!-- 📌 NOVO BOTÃO DE MODO ESCURO/CLARO -->
+      <button id="btn-tema" class="btn-tema" title="Alternar Tema">🌙</button>
       <div id="data-hora-atual" class="relogio">Carregando data e hora...</div>
     </header>
-
     <!-- Alertas Dinâmicos -->
     <div id="alerta-status" class="alerta oculto"></div>
     <!-- Alerta para contas a vencer / atrasadas -->
-     <div id="alerta-vencimento" class="alerta alerta-perigo oculto"></div>
+    <div id="alerta-vencimento" class="alerta alerta-perigo oculto"></div>
 
     <!-- Painel de Resumo / Totais -->
     <section class="resumo-painel">
@@ -34,7 +37,7 @@
         <h3>Fatura do Cartão</h3>
         <p id="total-cartao">R$ 0,00</p>
         <!-- Botão para dar baixa na fatura do cartão -->
-         <button id="btn-pagar-cartao" class="btn-acao-card">Pagar Fatura</button>
+        <button id="btn-pagar-cartao" class="btn-acao-card">Pagar Fatura</button>
       </div>
       <div class="card saldo">
         <h3>Saldo em Conta</h3>
@@ -64,14 +67,14 @@
             <option value="entrada">Ganho (Entrada)</option>
             <option value="saida">Gasto (Dinheiro/Débito)</option>
             <!-- Nova opção no menu select -->
-             <option value="fixo">Gasto fixo (Luz, Aluguel, Pensão...)</option>
+            <option value="fixo">Gasto fixo (Luz, Aluguel, Pensão...)</option>
             <option value="cartao">Compra no Cartão</option>
           </select>
           <!-- Campo de Vencimento -->
-           <div id="campo-vencimento" class="oculto">
+          <div id="campo-vencimento" class="oculto">
             <label for="dia-vencimento">Dia do vencimento no Mês:</label>
             <input type="number" id="dia-vencimento" min="1" max="31" placeholder="Ex: 10">
-           </div>
+          </div>
           <button type="submit" id="btn-adicionar">Adicionar</button>
         </div>
       </form>
@@ -105,4 +108,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
