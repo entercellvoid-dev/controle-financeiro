@@ -17,6 +17,8 @@
 
     <!-- Alertas Dinâmicos -->
     <div id="alerta-status" class="alerta oculto"></div>
+    <!-- Alerta para contas a vencer / atrasadas -->
+     <div id="alerta-vencimento" class="alerta alerta-perigo oculto"></div>
 
     <!-- Painel de Resumo / Totais -->
     <section class="resumo-painel">
@@ -31,6 +33,8 @@
       <div class="card cartao">
         <h3>Fatura do Cartão</h3>
         <p id="total-cartao">R$ 0,00</p>
+        <!-- Botão para dar baixa na fatura do cartão -->
+         <button id="btn-pagar-cartao" class="btn-acao-card">Pagar Fatura</button>
       </div>
       <div class="card saldo">
         <h3>Saldo em Conta</h3>
@@ -59,8 +63,15 @@
           <select id="tipo">
             <option value="entrada">Ganho (Entrada)</option>
             <option value="saida">Gasto (Dinheiro/Débito)</option>
+            <!-- Nova opção no menu select -->
+             <option value="fixo">Gasto fixo (Luz, Aluguel, Pensão...)</option>
             <option value="cartao">Compra no Cartão</option>
           </select>
+          <!-- Campo de Vencimento -->
+           <div id="campo-vencimento" class="oculto">
+            <label for="dia-vencimento">Dia do vencimento no Mês:</label>
+            <input type="number" id="dia-vencimento" min="1" max="31" placeholder="Ex: 10">
+           </div>
           <button type="submit" id="btn-adicionar">Adicionar</button>
         </div>
       </form>
@@ -79,6 +90,7 @@
       <h2>Gerenciar Dados (Backup)</h2>
       <div class="backup-botoes">
         <button id="btn-exportar" class="btn-secundario">📥 Baixar Backup (JSON)</button>
+        <button id="btn-reset" style="background-color: #e74c3c; margin-top: 10px;">⚠️ Limpar Todos os Dados</button>
         <button id="btn-importar" class="btn-secundario">📤 Restaurar Backup</button>
         <input type="file" id="input-importar" accept=".json" style="display: none;">
       </div>
@@ -86,7 +98,7 @@
 
     <!-- Rodapé de Direitos Autorais -->
     <footer class="rodape-autorais">
-      <p>&copy; 2026 Intercel. Todos os direitos reservados.</p>
+      <p>&copy; 2026 Enter-Cell. Todos os direitos reservados.</p>
     </footer>
 
   </div>

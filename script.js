@@ -4,6 +4,11 @@ const descricaoInput = document.getElementById('descricao');
 const valorInput = document.getElementById('valor');
 const tipoSelect = document.getElementById('tipo');
 
+const campoVencimento = document.getElementById('campo-vencimento');
+const diaVencimentoInput = document.getElementById('dia-vencimento');
+const btnPagarCartao = document.getElementById('btn-pagar-cartao');
+const alertaVencimentosEl = document.getElementById('alerta-vencimentos')
+
 const limiteCartaoInput = document.getElementById('limite-cartao-input');
 const btnSalvarLimite = document.getElementById('btn-salvar-limite');
 
@@ -26,6 +31,15 @@ let transacoes = JSON.parse(localStorage.getItem('transacoes_financeiras')) || [
 let limiteCartao = parseFloat(localStorage.getItem('limite_cartao')) || 0;
 
 limiteCartaoInput.value = limiteCartao ? limiteCartao : '';
+
+// Ocultar ou exibir campo de vencimento
+tipoSelect.addEventListener('change', () => {
+  if (tipoSelect.value === 'fixo') {
+    campoVencimento.classList.remove('oculto');
+  } else {
+    campoVencimento.classList.add('oculto');
+  }
+});
 
 // --- RELÓGIO EM TEMPO REAL ---
 function atualizarRelogio() {
@@ -68,7 +82,7 @@ function atualizarTotais() {
     .reduce((acc, t) => acc + t.valor, 0);
 
   const saidas = transacoes
-    .filter(t => t.tipo === 'saida')
+    .filter(t => t.tipo === 'saida' || (t.tipo === 'fixo' && t.pago))
     .reduce((acc, t) => acc + t.valor, 0);
 
   const cartao = transacoes
@@ -87,6 +101,7 @@ function atualizarTotais() {
   saldoTotalEl.className = 'valor ' + (saldoEmConta >= 0 ? 'entrada' : 'saida');
 
   gerarAlertaFinanceiro(entradas, saidas, cartao, saldoEmConta, limiteDisponivel);
+  verificarVencimentos();
 }
 
 // Salvar limite de cartão
@@ -101,6 +116,61 @@ btnSalvarLimite.addEventListener('click', () => {
     alert('Insira um valor válido para o limite.');
   }
 });
+
+btnPagarCartao.addEventListener('click', () => {
+  const totalCartao = transacoes
+    .filter(t => t.tipo === 'cartao')
+    .reduce((acc, t) => acc + t.valor, 0);
+
+  if (totalCartao <= 0) {
+    alert('Não há valor de fatura pedente no cartão.');
+    return;
+  }
+
+  if (confirm(`Deseja registrar o pagamento da fatura do cartão no calor de ${formatarMoeda(totalCartao)}?`)) {
+    transacoes.unshift({
+      descricao: 'Pagamento Fatura Cartão',
+      valor: totalCartao,
+      tipo: 'saida',
+      dataHora: obterDataHoraFormatada()
+    });
+    transacoes = transacoes.filter(t => t.tipo !== 'cartao');
+
+    renderizarTransacoes();
+    alert('Fatura paga com sucesso! O valor deduzido do seu Saldo em Conta.');
+  }
+});
+
+function verificarVencimentos() {
+  const hoje = new Date();
+  const diaAtual = hoje.getDate();
+
+  const pendentes = transacoes.filter(t => t.tipo === 'fixo' && !t.pago && t.diaVencimento);
+
+  if (pendentes.length === 0) {
+    alertaVencimentosEl.classList.add('oculto');
+    return;
+  }
+  let avisos = [];
+
+  pendentes.forEach(conta => {
+    const diaVenc = parseInt(conta.diaVencimento);
+    if (diaVenc === diaAtual) {
+      avisos.push(`⏰ <strong>HOJE é o dia de pagar:</strong> ${conta.descricao} (${formatarMoeda(conta.valor)})!`);
+    } else if (diaVenc < diaAtual) {
+      avisos.push(`🚨 <strong>CONTA ATRASADA/PENDENTE:</strong> ${conta.descricao} (Venceu dia ${diaVenc}) - ${formatarMoeda(conta.valor)}`);
+    } else if (diaVenc - diaAtual <= 3) {
+      avisos.push(`📅 <strong>Vence em breve (dia ${diaVenc}):</strong>`);
+    }
+  });
+  if (avisos.length > 0) {
+    alertaVencimentosEl.classList.remove('oculto');
+    alertaVencimentosEl.innerHTML = avisos.join('<br>');
+  } else {
+    alertaVencimentosEl.classList.add('oculto');
+  }
+}
+
 
 // Gerar Alertas
 function gerarAlertaFinanceiro(entradas, saidas, cartao, saldo, limiteDisponivel) {
@@ -138,9 +208,10 @@ function renderizarTransacoes() {
   // Pega apenas as primeiras 14 transações da lista
   const transacoesExibidas = transacoes.slice(0, 14);
 
-  transacoes.forEach((transacao, index) => {
+  transacoesExibidas.forEach((transacao, index) => {
     const li = document.createElement('li');
     li.classList.add(transacao.tipo);
+    if (transacao.pago) li.classList.add('pago');
 
     let sinal = '-';
     let tagTipo = 'Gasto';
@@ -151,17 +222,30 @@ function renderizarTransacoes() {
     } else if (transacao.tipo === 'cartao') {
       sinal = '💳';
       tagTipo = 'Cartão';
+    } else if (transacao.tipo === 'fixo') {
+      sinal = '📌';
+      tagTipo = transacao.diaVencimento ? `Fixo (Vence dia ${transacao.diaVencimento})` : 'Gasto Fixo';
     }
 
     const dataExibicao = transacao.dataHora ? transacao.dataHora : 'Data não registrada';
+
+    let botaoAcao = '';
+    if (transacao.tipo === 'fixo') {
+      if (transacao.pago) {
+        botaoAcao = `<span class="badge-pago">✔ Pago</span>`;
+      } else {
+        botaoAcao = `<button class="btn-pago" onclick="marcarComoPago(${index})">Pagar?</button>`;
+      }
+    }
 
     li.innerHTML = `
       <div class="info-transacao">
         <span><strong>${transacao.descricao}</strong> <small>(${tagTipo})</small></span>
         <span class="data-transacao">🕒 ${dataExibicao}</span>
       </div>
-      <div>
-        <span style="margin-right: 10px;"><strong>${sinal} ${formatarMoeda(transacao.valor)}</strong></span>
+      <div class="acoes-item">
+        <span style="margin-right: 5px;"><strong>${sinal} ${formatarMoeda(transacao.valor)}</strong></span>
+        ${botaoAcao}
         <button class="btn-deletar" onclick="removerTransacao(${index})">X</button>
       </div>
     `;
@@ -173,6 +257,11 @@ function renderizarTransacoes() {
   atualizarTotais();
 }
 
+function marcarComoPago(index) {
+  transacoes[index].pago = true;
+  renderizarTransacoes();
+}
+
 // Adicionar Transação (agora usando unshift para colocar a mais nova no topo)
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -180,6 +269,7 @@ form.addEventListener('submit', (e) => {
   const descricao = descricaoInput.value.trim();
   const valor = parseFloat(valorInput.value);
   const tipo = tipoSelect.value;
+  const diaVencimento = diaVencimentoInput.value;
 
   if (descricao === '' || isNaN(valor) || valor <= 0) {
     alert('Preencha um valor válido!');
@@ -190,6 +280,8 @@ form.addEventListener('submit', (e) => {
     descricao,
     valor,
     tipo,
+    pago: tipo === 'fixo' ? false: true,
+    diaVencimento: tipo === 'fixo' ? diaVencimento : null,
     dataHora: obterDataHoraFormatada()
   };
 
@@ -198,6 +290,8 @@ form.addEventListener('submit', (e) => {
 
   descricaoInput.value = '';
   valorInput.value = '';
+  diaVencimentoInput.value = '';
+  campoVencimento.classList.add('oculto');
 });
 
 // Remover Transação
@@ -212,12 +306,12 @@ btnExportar.addEventListener('click', () => {
     transacoes: transacoes,
     limiteCartao: limiteCartao
   };
-  
+
   const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `backup_financeiro_${new Date().toISOString().slice(0,10)}.json`;
+  a.download = `backup_financeiro_${new Date().toISOString().slice(0, 10)}.json`;
   a.click();
 });
 
@@ -234,10 +328,10 @@ inputImportar.addEventListener('change', (e) => {
       if (dados.transacoes) {
         transacoes = dados.transacoes;
         limiteCartao = dados.limiteCartao || 0;
-        
+
         localStorage.setItem('transacoes_financeiras', JSON.stringify(transacoes));
         localStorage.setItem('limite_cartao', limiteCartao);
-        
+
         limiteCartaoInput.value = limiteCartao ? limiteCartao : '';
         renderizarTransacoes();
         alert('Backup restaurado com sucesso!');
@@ -248,6 +342,21 @@ inputImportar.addEventListener('change', (e) => {
   };
   leitor.readAsText(arquivo);
 });
+
+const btnReset = document.getElementById('btn-reset');
+
+if (btnReset) {
+  btnReset.addEventListener('click', () => {
+    if (confirm('Tem certeza que deseja apagar todos os dados, transações e o limite do cartão?')) {
+      localStorage.clear(); // Limpa todo o localStorage do site
+      transacoes = [];      // Zera a lista no código
+      limiteCartao = 0;     // Zera o limite
+      renderizarTransacoes();
+      alert('Dados limpos com sucesso!');
+      window.location.reload(); // Recarrega a página
+    }
+  });
+}
 
 // Inicialização
 renderizarTransacoes();
